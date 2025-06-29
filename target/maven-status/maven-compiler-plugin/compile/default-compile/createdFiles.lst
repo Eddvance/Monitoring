@@ -1,0 +1,4 @@
+io/eddvance/production/monitoring/repository/ServiceMetricRepository.class
+io/eddvance/production/monitoring/model/ServiceMetric.class
+io/eddvance/production/monitoring/config/R2dbcConfig.class
+io/eddvance/production/monitoring/service/MonitoringService.class
