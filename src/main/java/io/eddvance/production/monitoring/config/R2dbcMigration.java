@@ -12,8 +12,15 @@ public class R2dbcMigration {
 
     private static final Logger log = LoggerFactory.getLogger(R2dbcMigration.class);
 
+    private final DatabaseClient databaseClient;
+
+    public R2dbcMigration(DatabaseClient databaseClient) {
+        this.databaseClient = databaseClient;
+    }
+
     @EventListener(ApplicationReadyEvent.class)
-    public void createTables(DatabaseClient databaseClient) {
+    public void createTables() {
+        log.info("🚀 Démarrage de la migration de base de données...");
         databaseClient.sql("""
                         CREATE TABLE IF NOT EXISTS service_metrics (
                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -27,6 +34,8 @@ public class R2dbcMigration {
                 .then()
                 .doOnSuccess(v -> log.info("✅ Table service_metrics créée avec succès"))
                 .doOnError(e -> log.error("❌ Erreur lors de la création de la table", e))
-                .subscribe(); // ← Important : subscribe pour exécuter
+                .block();
+
+        log.info("Migration terminée");
     }
 }

@@ -1,4 +1,10 @@
+io/eddvance/production/monitoring/metrics/LowCarbMetrics.class
+io/eddvance/production/monitoring/config/MetricsConfig.class
+io/eddvance/production/monitoring/service/MetricsService.class
+io/eddvance/production/monitoring/service/MonitoringService.class
 io/eddvance/production/monitoring/repository/ServiceMetricRepository.class
 io/eddvance/production/monitoring/model/ServiceMetric.class
+io/eddvance/production/monitoring/controller/MonitoringController.class
+io/eddvance/production/monitoring/MonitoringApplication.class
 io/eddvance/production/monitoring/config/R2dbcConfig.class
-io/eddvance/production/monitoring/service/MonitoringService.class
+io/eddvance/production/monitoring/config/R2dbcMigration.class

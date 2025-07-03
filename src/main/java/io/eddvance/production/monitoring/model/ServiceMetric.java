@@ -26,7 +26,6 @@ public class ServiceMetric {
         this.timestamp = LocalDateTime.now();
     }
 
-    // Getters et Setters
     public Long getId() {
         return id;
     }

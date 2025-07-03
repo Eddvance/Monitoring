@@ -15,16 +15,13 @@ import java.time.LocalDateTime;
 public class MonitoringController {
 
     private final MonitoringService monitoringService;
-    private final MetricsService metricsService; // AJOUT
+    private final MetricsService metricsService;
 
     public MonitoringController(MonitoringService monitoringService, MetricsService metricsService) {
         this.monitoringService = monitoringService;
-        this.metricsService = metricsService; // AJOUT
+        this.metricsService = metricsService;
     }
 
-    /**
-     * ENDPOINT EXISTANT - fonctionne toujours pareil
-     */
     @PostMapping("/metric")
     public Mono<ServiceMetric> recordMetric(
             @RequestParam String serviceName,
@@ -34,22 +31,13 @@ public class MonitoringController {
         return monitoringService.saveMetric(serviceName, metricName, value, status);
     }
 
-    /**
-     * NOUVEL ENDPOINT - Pour les taux avec mesure automatique des performances
-     */
     @PostMapping("/rate")
-    public Mono<String> recordRate(
-            @RequestParam String rateType, // "carbon" ou "green"
-            @RequestParam Double value) {
-
-        // Utilise la nouvelle méthode avec timing automatique
+    public Mono<String> recordRate(@RequestParam String rateType, @RequestParam Double value) {
         return metricsService.recordRateRequestWithTiming(rateType, Mono.just(value))
                 .map(recordedValue -> "Taux " + rateType + " enregistré: " + recordedValue);
     }
 
-    /**
-     * NOUVEL ENDPOINT - Pour obtenir les valeurs actuelles
-     */
+
     @GetMapping("/current-rates")
     public Mono<String> getCurrentRates() {
         return Mono.fromCallable(() -> {
@@ -57,24 +45,17 @@ public class MonitoringController {
             double greenRate = metricsService.getCurrentGreenRate();
             long activeServices = metricsService.getActiveServicesCount();
 
-            return String.format(
-                    "Taux carbone actuel: %.2f, Taux vert actuel: %.2f, Services actifs: %d",
-                    carbonRate, greenRate, activeServices
-            );
+            return String.format("Taux carbone actuel: %.2f, Taux vert actuel: %.2f, Services actifs: %d", carbonRate, greenRate, activeServices);
         });
     }
 
-    /**
-     * NOUVEL ENDPOINT - Résumé complet des métriques
-     */
+
     @GetMapping("/summary")
     public Mono<String> getMetricsSummary() {
         return monitoringService.getMetricsSummary();
     }
 
-    /**
-     * ENDPOINTS EXISTANTS - fonctionnent toujours pareil
-     */
+
     @GetMapping("/metrics/{serviceName}")
     public Flux<ServiceMetric> getServiceMetrics(
             @PathVariable String serviceName,
@@ -87,18 +68,14 @@ public class MonitoringController {
         return monitoringService.getLatestMetric(serviceName);
     }
 
-    /**
-     * NOUVEL ENDPOINT - Gestion des services actifs
-     */
+
     @PostMapping("/service/register")
     public Mono<String> registerService() {
-        return Mono.fromRunnable(() -> metricsService.registerActiveService())
-                .then(Mono.just("Service enregistré"));
+        return Mono.fromRunnable(() -> metricsService.registerActiveService()).then(Mono.just("Service enregistré"));
     }
 
     @PostMapping("/service/unregister")
     public Mono<String> unregisterService() {
-        return Mono.fromRunnable(() -> metricsService.unregisterActiveService())
-                .then(Mono.just("Service désenregistré"));
+        return Mono.fromRunnable(() -> metricsService.unregisterActiveService()).then(Mono.just("Service désenregistré"));
     }
 }

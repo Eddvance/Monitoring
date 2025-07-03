@@ -16,14 +16,9 @@ public class MetricsService {
         this.metrics = metrics;
     }
 
-    /**
-     * ANCIENNE MÉTHODE MODIFIÉE
-     * Enregistre une requête de taux et mesure le temps de réponse
-     */
     public void recordRateRequest(String rateType, Double value) {
         try {
             if ("carbon".equals(rateType)) {
-                // Utilise la nouvelle méthode qui fait tout en une fois
                 metrics.incrementCarbonRateRequests();
                 metrics.setLastCarbonRate(value);
             } else if ("green".equals(rateType)) {
@@ -31,16 +26,12 @@ public class MetricsService {
                 metrics.setLastGreenRate(value);
             }
         } catch (Exception e) {
-            // Utilise le nouveau compteur d'erreurs
             metrics.incrementErrors("rate_calculation_error");
             throw e;
         }
     }
 
-    /**
-     * NOUVELLE MÉTHODE avec mesure du temps de réponse
-     * Utilise cette méthode si tu veux mesurer les performances
-     */
+
     public Mono<Double> recordRateRequestWithTiming(String rateType, Mono<Double> rateCalculation) {
         Instant start = Instant.now();
 
@@ -49,7 +40,6 @@ public class MetricsService {
                     Duration responseTime = Duration.between(start, Instant.now());
 
                     if ("carbon".equals(rateType)) {
-                        // Utilise la méthode utilitaire qui fait tout
                         metrics.recordCarbonRateRequest(value, responseTime);
                     } else if ("green".equals(rateType)) {
                         metrics.recordGreenRateRequest(value, responseTime);
@@ -60,9 +50,6 @@ public class MetricsService {
                 });
     }
 
-    /**
-     * NOUVELLE MÉTHODE pour gérer les services actifs
-     */
     public void registerActiveService() {
         metrics.incrementActiveServices();
     }
@@ -71,15 +58,11 @@ public class MetricsService {
         metrics.decrementActiveServices();
     }
 
-    /**
-     * ANCIENNE MÉTHODE GARDÉE IDENTIQUE
-     */
+
     public Mono<String> checkServiceHealth(String serviceName) {
         try {
-            // Simulation simple de vérification de santé
             return Mono.just("UP")
                     .doOnSuccess(status -> {
-                        // On peut maintenant tracker les health checks
                         if ("UP".equals(status)) {
                             registerActiveService();
                         }
@@ -90,9 +73,7 @@ public class MetricsService {
         }
     }
 
-    /**
-     * NOUVELLES MÉTHODES pour obtenir les valeurs actuelles
-     */
+
     public double getCurrentCarbonRate() {
         return metrics.getLastCarbonRate();
     }
