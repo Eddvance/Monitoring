@@ -1,0 +1,66 @@
+# ====================
+#  Build directories
+# ====================
+/target/
+/build/
+
+# ====================
+#  IntelliJ IDEA
+# ====================
+/.idea/
+/*.iml
+/*.iws
+/out/
+
+# ====================
+#  Eclipse (au cas où)
+# ====================
+.project
+.classpath
+.settings/
+
+# ====================
+#  Maven
+# ====================
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ====================
+#  Gradle
+# ====================
+.gradle/
+/build/
+
+# ====================
+#  Logs et fichiers temporaires
+# ====================
+*.log
+logs/
+hs_err_pid*
+*.pid
+
+# ====================
+#  Configs sensibles
+# ====================
+.env
+*.yml.local
+application-*.yml
+
+# ====================
+#  Système
+# ====================
+.DS_Store
+Thumbs.db
+
+# ====================
+#  Docker (si tu dockerises)
+# ====================
+*.dockerfile
+docker-compose.override.yml
