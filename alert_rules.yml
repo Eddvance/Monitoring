@@ -1,0 +1,53 @@
+groups:
+  - name: service_alerts
+    interval: 30s
+    rules:
+      # Service Down
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.instance }} is down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
+
+      # High Response Time
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, http_server_requests_seconds_bucket) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time on {{ $labels.instance }}"
+          description: "95th percentile response time is above 500ms (current value: {{ $value }}s)"
+
+      # High Error Rate
+      - alert: HighErrorRate
+        expr: rate(http_server_requests_seconds_count{status=~"5.."}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate on {{ $labels.instance }}"
+          description: "Error rate is above 5% (current value: {{ $value }})"
+
+      # JVM Memory High
+      - alert: JVMMemoryHigh
+        expr: jvm_memory_used_bytes{area="heap"} / jvm_memory_max_bytes{area="heap"} > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "JVM heap memory high on {{ $labels.instance }}"
+          description: "JVM heap memory usage is above 80% (current value: {{ $value }})"
+
+      # Service Health Check Failed
+      - alert: ServiceHealthCheckFailed
+        expr: service_health_status == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.service }} health check failed"
+          description: "Health check for {{ $labels.service }} has been failing for more than 2 minutes"

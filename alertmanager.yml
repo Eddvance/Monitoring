@@ -1,0 +1,15 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'web.hook'
+
+receivers:
+  - name: 'web.hook'
+    # Pas de configuration - les alertes seront juste visibles dans l'interface
+
+inhibit_rules: []
