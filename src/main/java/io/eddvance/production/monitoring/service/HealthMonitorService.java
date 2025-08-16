@@ -34,7 +34,7 @@ public class HealthMonitorService {
     }
 
     private void initializeServices() {
-        services.add(new ServiceEndpoint("Lowcarb-app", "http://host.docker.internal:8080/actuator/health"));
+        services.add(new ServiceEndpoint("LowCarb-app", "http://host.docker.internal:8080/actuator/health"));
         services.add(new ServiceEndpoint("CoalFired-service", "http://host.docker.internal:3000/platform/productCatalogManagement/v4/actuator/health"));
         services.add(new ServiceEndpoint("LowCarbPower-service", "http://host.docker.internal:8081/actuator/health"));
 
